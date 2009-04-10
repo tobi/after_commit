@@ -17,25 +17,26 @@ module AfterCommit
         alias_method_chain :commit_db_transaction, :callback
 
         # In the event the transaction fails and rolls back, nothing inside
-        # should recieve the after_commit callback.
+        # should recieve the after_commit callback, but do fire the after_rollback
+        # callback for each record that failed to be committed.
         def rollback_db_transaction_with_callback
           rollback_db_transaction_without_callback
 
-          AfterCommit.committed_records = []
-          AfterCommit.committed_records_on_create = []
-          AfterCommit.committed_records_on_update = []
-          AfterCommit.committed_records_on_destroy = []
+          trigger_after_rollback_callbacks
+          AfterCommit.committed_records_on_create.clear
+          AfterCommit.committed_records_on_update.clear
+          AfterCommit.committed_records_on_destroy.clear
         end
         alias_method_chain :rollback_db_transaction, :callback
         
-        protected        
+        protected
           def trigger_after_commit_callbacks
             # Trigger the after_commit callback for each of the committed
             # records.
             if AfterCommit.committed_records.any?
               AfterCommit.committed_records.each do |record|
                 begin
-                  record.after_commit_callback
+                  record.send(:callback, :after_commit)
                 rescue
                 end
               end
@@ -49,7 +50,7 @@ module AfterCommit
 
             # Make sure we clear out our list of committed records now that we've
             # triggered the callbacks for each one. 
-            AfterCommit.committed_records = []
+            AfterCommit.committed_records.clear
           end
         
           def trigger_after_commit_on_create_callbacks
@@ -58,7 +59,7 @@ module AfterCommit
             if AfterCommit.committed_records_on_create.any?
               AfterCommit.committed_records_on_create.each do |record|
                 begin
-                  record.after_commit_on_create_callback
+                  record.send(:callback, :after_commit_on_create)
                 rescue
                 end
               end
@@ -72,7 +73,7 @@ module AfterCommit
 
             # Make sure we clear out our list of committed records now that we've
             # triggered the callbacks for each one. 
-            AfterCommit.committed_records_on_create = []
+            AfterCommit.committed_records_on_create.clear
           end
         
           def trigger_after_commit_on_update_callbacks
@@ -81,7 +82,7 @@ module AfterCommit
             if AfterCommit.committed_records_on_update.any?
               AfterCommit.committed_records_on_update.each do |record|
                 begin
-                  record.after_commit_on_update_callback
+                  record.send(:callback, :after_commit_on_update)
                 rescue
                 end
               end 
@@ -95,7 +96,7 @@ module AfterCommit
 
             # Make sure we clear out our list of committed records now that we've
             # triggered the callbacks for each one. 
-            AfterCommit.committed_records_on_update = []
+            AfterCommit.committed_records_on_update.clear
           end
         
           def trigger_after_commit_on_destroy_callbacks
@@ -104,7 +105,7 @@ module AfterCommit
             if AfterCommit.committed_records_on_destroy.any?
               AfterCommit.committed_records_on_destroy.each do |record|
                 begin
-                  record.after_commit_on_destroy_callback
+                  record.send(:callback, :after_commit_on_destroy)
                 rescue
                 end
               end 
@@ -118,7 +119,24 @@ module AfterCommit
 
             # Make sure we clear out our list of committed records now that we've
             # triggered the callbacks for each one. 
-            AfterCommit.committed_records_on_destroy = []
+            AfterCommit.committed_records_on_destroy.clear
+          end
+
+          def trigger_after_rollback_callbacks
+            # Trigger the after_rollback callback for each of the committed
+            # records.
+            if AfterCommit.committed_records.any?
+              AfterCommit.committed_records.each do |record|
+                begin
+                  record.send(:callback, :after_rollback)
+                rescue
+                end
+              end 
+            end 
+
+            # Make sure we clear out our list of committed records now that we've
+            # triggered the callbacks for each one.
+            AfterCommit.committed_records.clear
           end
         #end protected
       end 

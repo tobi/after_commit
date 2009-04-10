@@ -2,7 +2,7 @@ module AfterCommit
   def self.committed_records
     Thread.current[:committed_records] ||= []
   end
-
+  
   def self.committed_records=(committed_records)
     Thread.current[:committed_records] = committed_records
   end
