@@ -74,28 +74,23 @@ module AfterCommit
           end
         end
 
-        after_save    :add_committed_record
         after_create  :add_committed_record_on_create
         after_update  :add_committed_record_on_update
         after_destroy :add_committed_record_on_destroy
-
-        # We need to keep track of records that have been saved or destroyed
-        # within this transaction.
-        def add_committed_record
-          AfterCommit.committed_records << self
-        end
         
         def add_committed_record_on_create
-          AfterCommit.committed_records_on_create << self
+          AfterCommit.record(self.class.connection, self)
+          AfterCommit.record_created(self.class.connection, self)
         end
         
         def add_committed_record_on_update
-          AfterCommit.committed_records_on_update << self
+          AfterCommit.record(self.class.connection, self)
+          AfterCommit.record_updated(self.class.connection, self)
         end
         
         def add_committed_record_on_destroy
-          AfterCommit.committed_records << self
-          AfterCommit.committed_records_on_destroy << self
+          AfterCommit.record(self.class.connection, self)
+          AfterCommit.record_destroyed(self.class.connection, self)
         end
       end
     end

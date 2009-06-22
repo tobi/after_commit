@@ -8,8 +8,6 @@ class MockRecord < ActiveRecord::Base
   attr_accessor :after_commit_on_update_called
   attr_accessor :after_commit_on_destroy_called
 
-  cattr_accessor :c_after_commit_called, :c_after_commit_on_create_called, :c_after_commit_on_update_called, :c_after_commit_on_destroy_called
-
   before_commit_on_create :do_before_create
   def do_before_create
     self.before_commit_on_create_called = true
@@ -39,27 +37,6 @@ class MockRecord < ActiveRecord::Base
   def do_after_destroy
     self.after_commit_on_destroy_called = true
   end
-
-  def self.after_commit(records)
-    self.c_after_commit_called ||= 0
-    self.c_after_commit_called += 1
-  end
-
-  def self.after_commit_on_create(records)
-    self.c_after_commit_on_create_called ||= 0
-    self.c_after_commit_on_create_called += 1
-  end
-
-  def self.after_commit_on_update(records)
-    self.c_after_commit_on_update_called ||= 0
-    self.c_after_commit_on_update_called += 1
-  end
-
-  def self.after_commit_on_destroy(records)
-    self.c_after_commit_on_destroy_called ||= 0
-    self.c_after_commit_on_destroy_called += 1
-  end
-
 end
 
 class UnsavableRecord < ActiveRecord::Base
@@ -118,45 +95,5 @@ class AfterCommitTest < Test::Unit::TestCase
     begin; record.save; rescue; end
 
     assert_equal false, record.after_commit_called
-  end
-  
-  def test_class_after_commit_is_called
-    MockRecord.c_after_commit_called = 0
-    MockRecord.transaction do
-      obj = MockRecord.create!
-      obj.save
-      obj.destroy
-    end
-    assert_equal 1, MockRecord.c_after_commit_called
-  end
-
-  def test_class_after_commit_on_create_called
-    MockRecord.c_after_commit_on_create_called = 0
-    MockRecord.transaction do
-      obj = MockRecord.create!
-      obj.save
-      obj.destroy
-    end
-    assert_equal 1, MockRecord.c_after_commit_on_create_called
-  end
-
-  def test_class_after_commit_on_update_called
-    MockRecord.c_after_commit_on_update_called = 0
-    MockRecord.transaction do 
-      obj = MockRecord.create!
-      obj.save
-      obj.destroy      
-    end
-    assert_equal 1, MockRecord.c_after_commit_on_update_called
-  end
-
-  def test_class_after_commit_on_destroy_called
-    MockRecord.c_after_commit_on_destroy_called = 0
-    MockRecord.transaction do
-      obj = MockRecord.create!
-      obj.save
-      obj.destroy
-    end
-    assert_equal 1, MockRecord.c_after_commit_on_destroy_called
   end
 end

@@ -29,31 +29,30 @@ end
 
 class ObserverTest < Test::Unit::TestCase
   def setup
-    ObservableMockRecordObserver.instance
+    ObservableMockRecord.add_observer ObservableMockRecordObserver.instance
   end
 
   def test_after_commit_is_called
-    record = ObservableMockRecord.new
-    record.save
+    record = ObservableMockRecord.create!
 
     assert record.after_commit_called
   end
 
   def test_after_commit_on_create_is_called
-    record = ObservableMockRecord.create
+    record = ObservableMockRecord.create!
 
     assert record.after_commit_on_create_called
   end
 
   def test_after_commit_on_update_is_called
-    record = ObservableMockRecord.create
+    record = ObservableMockRecord.create!
     record.save
 
     assert record.after_commit_on_update_called
   end
 
   def test_after_commit_on_destroy_is_called
-    record = ObservableMockRecord.create.destroy
+    record = ObservableMockRecord.create!.destroy
 
     assert record.after_commit_on_destroy_called
   end
