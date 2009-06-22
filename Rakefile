@@ -40,16 +40,3 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-begin
-  gem 'technicalpickles-jeweler', '~> 1.0.1'
-  require 'jeweler'
-  Jeweler::Tasks.new do |s|
-    s.name = 'after_create'
-    s.summary = 'A Ruby on Rails plugin to add an after_commit callback'
-    s.homepage = 'http://github.com/GUI/after_commit'
-    s.description = 'A Ruby on Rails plugin to add an after_commit callback'
-    s.authors = ['Eli Miller', 'Joost Heitbrink', 'DeLynn Berry', 'Xavier Shay', 'Mat Brown']
-    s.files = FileList['[A-Z]*', '{lib,test}/**/*']
-    s.has_rdoc = false
-  end
-end
