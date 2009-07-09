@@ -38,7 +38,13 @@ module AfterCommit
                   record.after_commit_callback
                 rescue
                 end
-              end 
+              end
+              begin
+                AfterCommit.committed_records.group_by(&:class).each do |klass, records|
+                  klass.after_commit(records.uniq) if klass.respond_to?(:after_commit)
+                end
+              rescue
+              end
             end 
 
             # Make sure we clear out our list of committed records now that we've
@@ -55,7 +61,13 @@ module AfterCommit
                   record.after_commit_on_create_callback
                 rescue
                 end
-              end 
+              end
+              begin 
+                AfterCommit.committed_records_on_create.group_by(&:class).each do |klass, records|
+                  klass.after_commit_on_create(records.uniq) if klass.respond_to?(:after_commit_on_create)
+                end
+              rescue
+              end
             end 
 
             # Make sure we clear out our list of committed records now that we've
@@ -73,6 +85,12 @@ module AfterCommit
                 rescue
                 end
               end 
+              begin
+                AfterCommit.committed_records_on_update.group_by(&:class).each do |klass, records|
+                  klass.after_commit_on_update(records.uniq) if klass.respond_to?(:after_commit_on_update)
+                end
+              rescue
+              end
             end 
 
             # Make sure we clear out our list of committed records now that we've
@@ -90,6 +108,12 @@ module AfterCommit
                 rescue
                 end
               end 
+              begin
+                AfterCommit.committed_records_on_destroy.group_by(&:class).each do |klass, records|
+                  klass.after_commit_on_destroy(records.uniq) if klass.respond_to?(:after_commit_on_destroy)
+                end
+              rescue
+              end
             end 
 
             # Make sure we clear out our list of committed records now that we've
