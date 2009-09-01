@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{after_commit}
-  s.version = "0.0.0"
+  s.version = "0.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nick Muerdter", "David Yip"]
@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
      "README",
      "Rakefile",
      "VERSION",
+     "after_commit.gemspec",
      "init.rb",
      "lib/after_commit.rb",
      "lib/after_commit/active_record.rb",

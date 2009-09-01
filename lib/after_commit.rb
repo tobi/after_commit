@@ -31,3 +31,12 @@ module AfterCommit
     @@committed_records_on_destroy = committed_records
   end
 end
+
+require 'after_commit/active_record'
+require 'after_commit/connection_adapters'
+
+ActiveRecord::Base.send(:include, AfterCommit::ActiveRecord)
+
+Object.subclasses_of(ActiveRecord::ConnectionAdapters::AbstractAdapter).each do |klass|
+  klass.send(:include, AfterCommit::ConnectionAdapters)
+end
