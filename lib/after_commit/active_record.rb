@@ -1,9 +1,5 @@
 module AfterCommit
   module ActiveRecord
-    # Based on the code found in Thinking Sphinx:
-    # http://ts.freelancing-gods.com/ which was based on code written by Eli Miller:
-    # http://elimiller.blogspot.com/2007/06/proper-cache-expiry-with-aftercommit.html
-    # with slight modification from Joost Hietbrink. And now me! Whew.
     def self.included(base)
       base.class_eval do
         # The define_callbacks method was added post Rails 2.0.2 - if it
