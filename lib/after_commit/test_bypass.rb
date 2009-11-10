@@ -14,17 +14,17 @@ module AfterCommit::TestBypass
   end
 
   def add_committed_record_on_create
-    after_commit_callback
-    after_commit_on_create_callback
+    callback :after_commit
+    callback :after_commit_on_create
   end
 
   def add_committed_record_on_update
-    after_commit_callback
-    after_commit_on_update_callback
+    callback :after_commit
+    callback :after_commit_on_update
   end
 
   def add_committed_record_on_destroy
-    after_commit_callback
-    after_commit_on_destroy_callback
+    callback :after_commit
+    callback :after_commit_on_destroy
   end
 end

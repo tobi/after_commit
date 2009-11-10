@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{after_commit}
-  s.version = "1.0.1"
+  s.version = "1.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nick Muerdter", "David Yip", "Pat Allan"]
-  s.date = %q{2009-11-10}
+  s.date = %q{2009-11-11}
   s.description = %q{
     A Ruby on Rails plugin to add an after_commit callback. This can be used to trigger methods only after the entire transaction is complete.
   }
