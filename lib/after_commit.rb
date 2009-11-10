@@ -53,6 +53,7 @@ end
 
 require 'after_commit/active_record'
 require 'after_commit/connection_adapters'
+require 'after_commit/test_bypass'
 
 ActiveRecord::Base.send(:include, AfterCommit::ActiveRecord)
 
