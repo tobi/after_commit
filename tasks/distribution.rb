@@ -17,7 +17,7 @@ Jeweler::Tasks.new do |gem|
     A Ruby on Rails plugin to add an after_commit callback. This can be used to trigger methods only after the entire transaction is complete.
   }
   gem.email = "pat@freelancing-gods.com"
-  gem.homepage = "http://github.com/freelancing_god/after_commit"
+  gem.homepage = "http://github.com/freelancing-god/after_commit"
   gem.authors = ["Nick Muerdter", "David Yip", "Pat Allan"]
   
   gem.files = FileList[
