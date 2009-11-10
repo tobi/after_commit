@@ -16,18 +16,17 @@ Gem::Specification.new do |s|
   s.email = %q{pat@freelancing-gods.com}
   s.extra_rdoc_files = [
     "LICENSE",
-     "README"
+     "README.textile"
   ]
   s.files = [
     "LICENSE",
-     "README",
      "lib/after_commit.rb",
      "lib/after_commit/active_record.rb",
      "lib/after_commit/connection_adapters.rb",
      "lib/after_commit/test_bypass.rb",
      "rails/init.rb"
   ]
-  s.homepage = %q{http://github.com/freelancing_god/after_commit}
+  s.homepage = %q{http://github.com/freelancing-god/after_commit}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.5}
