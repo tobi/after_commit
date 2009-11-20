@@ -39,6 +39,26 @@ class MockRecord < ActiveRecord::Base
   end
 end
 
+class Foo < ActiveRecord::Base
+  attr_reader :creating
+  
+  after_commit :create_bar
+  
+  private
+  
+  def create_bar
+    @creating ||= 0
+    @creating += 1
+    
+    raise Exception, 'looping' if @creating > 1
+    Bar.create
+  end
+end
+
+class Bar < ActiveRecord::Base
+  #
+end
+
 class UnsavableRecord < ActiveRecord::Base
   attr_accessor :after_commit_called
 
@@ -65,35 +85,42 @@ class AfterCommitTest < Test::Unit::TestCase
   def test_before_commit_on_create_is_called
     assert_equal true, MockRecord.create!.before_commit_on_create_called
   end
-
+  
   def test_before_commit_on_update_is_called
     record = MockRecord.create!
     record.save
     assert_equal true, record.before_commit_on_update_called
   end
-
+  
   def test_before_commit_on_destroy_is_called
     assert_equal true, MockRecord.create!.destroy.before_commit_on_destroy_called
   end
-
+  
   def test_after_commit_on_create_is_called
     assert_equal true, MockRecord.create!.after_commit_on_create_called
   end
-
+  
   def test_after_commit_on_update_is_called
     record = MockRecord.create!
     record.save
     assert_equal true, record.after_commit_on_update_called
   end
-
+  
   def test_after_commit_on_destroy_is_called
     assert_equal true, MockRecord.create!.destroy.after_commit_on_destroy_called
   end
-
+  
   def test_after_commit_does_not_trigger_when_transaction_rolls_back
     record = UnsavableRecord.new
     begin; record.save; rescue; end
-
+  
     assert_equal false, record.after_commit_called
+  end
+  
+  def test_two_transactions_are_separate
+    Bar.delete_all
+    foo = Foo.create
+    
+    assert_equal 1, foo.creating
   end
 end
