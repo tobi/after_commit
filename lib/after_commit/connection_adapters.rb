@@ -154,10 +154,12 @@ module AfterCommit
         end
         
         def increment_transaction_pointer
+          Thread.current[:after_commit_pointer] ||= 0
           Thread.current[:after_commit_pointer] += 1
         end
         
         def decrement_transaction_pointer
+          Thread.current[:after_commit_pointer] ||= 0
           Thread.current[:after_commit_pointer] -= 1
         end
       end 
