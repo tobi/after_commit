@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{after_commit}
-  s.version = "1.0.3"
+  s.version = "1.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nick Muerdter", "David Yip", "Pat Allan"]
-  s.date = %q{2009-11-21}
+  s.date = %q{2009-11-25}
   s.description = %q{
     A Ruby on Rails plugin to add an after_commit callback. This can be used to trigger methods only after the entire transaction is complete.
   }
@@ -23,8 +23,7 @@ Gem::Specification.new do |s|
      "lib/after_commit.rb",
      "lib/after_commit/active_record.rb",
      "lib/after_commit/connection_adapters.rb",
-     "lib/after_commit/test_bypass.rb",
-     "rails/init.rb"
+     "lib/after_commit/test_bypass.rb"
   ]
   s.homepage = %q{http://github.com/freelancing-god/after_commit}
   s.rdoc_options = ["--charset=UTF-8"]
