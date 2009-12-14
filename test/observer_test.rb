@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/test_helper'
+require 'test_helper'
 
 class ObservableMockRecord < ActiveRecord::Base
   set_table_name 'mock_records'

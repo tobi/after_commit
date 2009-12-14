@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/test_helper'
+require 'test_helper'
 
 class MockRecord < ActiveRecord::Base
   attr_accessor :before_commit_on_create_called
