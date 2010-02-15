@@ -1,6 +1,6 @@
 h1. after_commit
 
-An ActiveRecord/Rails library to add @before_commit@, @after_commit@, @before_rollback@ and @after_rollback@ callbacks. These callbacks are focused on the transactions, instead of specific model actions. This is beneficial in situations where you are doing asynchronous processing and need committed objects.
+An ActiveRecord/Rails library to add @after_commit@ callback. These callback is focused on the transactions, instead of specific model actions. This is especially important with cache expiry. 
 
 h2. Installation
 
@@ -10,16 +10,8 @@ h2. Usage
 
 The following callbacks are provided:
 
-* before_commit
-* before_commit_on_create
-* before_commit_on_update
-* before_commit_on_destroy
 * after_commit
-* after_commit_on_create
-* after_commit_on_update
-* after_commit_on_destroy
-* before_rollback
-* after_rollback
+* (... others removed in this fork)
 
 You can use these just like you would any other callback:
 
