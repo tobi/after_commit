@@ -10,15 +10,18 @@ rescue LoadError
   retry
 end
 
-ActiveRecord::Base.establish_connection({"adapter" => "sqlite3", "database" => 'test.sqlite3'})
+require 'logger'
+ActiveRecord::Base.logger = Logger.new(STDERR)
+ActiveRecord::Base.establish_connection("adapter" => "mysql", "database" => 'mock_records', 'host' => '127.0.0.1', 'username' => 'root', 'password' => '')
+
 begin
-  ActiveRecord::Base.connection.execute("drop table mock_records");
-  ActiveRecord::Base.connection.execute("drop table foos");
-  ActiveRecord::Base.connection.execute("drop table bars");
+  ActiveRecord::Base.connection.execute("DROP TABLE mock_records");
+  ActiveRecord::Base.connection.execute("DROP TABLE bars");
+  ActiveRecord::Base.connection.execute("DROP TABLE foos");
 rescue
 end
-ActiveRecord::Base.connection.execute("create table mock_records(id int)");
-ActiveRecord::Base.connection.execute("create table foos(id int)");
-ActiveRecord::Base.connection.execute("create table bars(id int)");
+ActiveRecord::Base.connection.execute("CREATE TABLE `mock_records` (id INT);");
+ActiveRecord::Base.connection.execute("CREATE TABLE `bars` (id INT);");
+ActiveRecord::Base.connection.execute("CREATE TABLE `foos` (id INT);");
 
 require 'after_commit'

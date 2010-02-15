@@ -4,6 +4,10 @@ module AfterCommit
     add_to_collection  :committed_records, connection, record
   end
 
+  def self.records(connection)
+    collection :committed_records, connection
+  end
+    
   def self.record_created(connection, record)
     prepare_collection :committed_records_on_create, connection
     add_to_collection  :committed_records_on_create, connection, record
@@ -17,10 +21,6 @@ module AfterCommit
   def self.record_destroyed(connection, record)
     prepare_collection :committed_records_on_destroy, connection
     add_to_collection  :committed_records_on_destroy, connection, record
-  end
-  
-  def self.records(connection)
-    collection :committed_records, connection
   end
 
   def self.created_records(connection)
@@ -36,15 +36,8 @@ module AfterCommit
   end
 
   def self.cleanup(connection)
-    [
-      :committed_records,
-      :committed_records_on_create,
-      :committed_records_on_update,
-      :committed_records_on_destroy
-    ].each do |collection|
-      Thread.current[collection]                        ||= {}
-      Thread.current[collection][connection.old_transaction_key] = []
-    end
+    Thread.current[:committed_records]  ||= {}
+    Thread.current[:committed_records][connection.old_transaction_key] = []
   end
   
   def self.prepare_collection(collection, connection)
@@ -62,9 +55,10 @@ module AfterCommit
   end
 end
 
-require 'after_commit/active_record'
+require 'active_record'
+require 'after_commit/callback'
 require 'after_commit/connection_adapters'
 require 'after_commit/test_bypass'
 
-ActiveRecord::Base.send(:include, AfterCommit::ActiveRecord)
-ActiveRecord::Base.include_after_commit_extensions
+ActiveRecord::Base.send(:include, AfterCommit::Callback)
+ActiveRecord::Base.connection.class.send(:include, AfterCommit::ConnectionAdapters)
