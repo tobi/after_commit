@@ -8,7 +8,6 @@ module AfterCommit
     
     def mark_record_for_after_commit
       AfterCommit.add(self.class.connection, self)
-      true
     end
     
   end
