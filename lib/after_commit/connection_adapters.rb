@@ -10,7 +10,7 @@ module AfterCommit
         def commit_db_transaction_with_callback
           increment_transaction_pointer
           result = commit_db_transaction_without_callback
-            
+                    
           AfterCommit.records(self).each do |record|
             record.send :callback, :after_commit
           end

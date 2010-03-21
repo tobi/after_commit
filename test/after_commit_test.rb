@@ -61,6 +61,11 @@ end
 
 class AfterCommitTest < Test::Unit::TestCase
   
+  def test_the_basics
+    foo = Foo.create!
+    assert_equal 1, foo.creating
+  end
+  
   def test_two_transactions_are_separate
     Bar.delete_all
     foo = Foo.create
@@ -87,5 +92,23 @@ class AfterCommitTest < Test::Unit::TestCase
     assert_equal HazardRecord.count, num+1    
       
   end
+  
+  
+  def test_record_keeping
+    
+    connection = Struct.new(:old_transaction_key).new('123')
+    
+    AfterCommit.records(connection) << 1    
+    assert_equal Set.new([1]), AfterCommit.records(connection)
+  end
+
+  def test_record_cleaning
+    connection = Struct.new(:old_transaction_key).new('123')
+
+    AfterCommit.records(connection) << 1    
+    AfterCommit.cleanup(connection)
+    assert_equal Set.new(), AfterCommit.records(connection)
+  end
+  
   
 end

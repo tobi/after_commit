@@ -11,7 +11,7 @@ rescue LoadError
 end
 
 require 'logger'
-ActiveRecord::Base.logger = Logger.new(STDERR)
+ActiveRecord::Base.logger# = Logger.new(STDERR)
 ActiveRecord::Base.establish_connection("adapter" => "mysql", "database" => 'mock_records', 'host' => '127.0.0.1', 'username' => 'root', 'password' => '')
 
 begin
